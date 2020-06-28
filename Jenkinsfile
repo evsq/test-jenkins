@@ -22,10 +22,30 @@ pipeline {
                     sh "docker build -t testregistry.com/calculator ."
                }
           }
+          stage("Docker login") {
+               steps {
+                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'registry',
+                    usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                    sh "docker login testregistry.com --username $USERNAME --password $PASSWORD"
+                    }
+                }
+          }          
           stage("Docker push") {
                steps {
                     sh "docker push testregistry.com/calculator"
                }
           }
+          stage("Deploy to staging") {
+              steps {
+                    sh "docker run -d --rm -p 8765:8080 --name calculator testregistry.com/calculator"
+              }
+          }
+
+          stage("Acceptance test") {
+              steps {
+                    sleep 60
+                    sh "bash acceptance_test.sh"
+              }
+          }          
      }
 }
