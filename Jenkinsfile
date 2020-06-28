@@ -44,9 +44,9 @@ pipeline {
           stage("Acceptance test") {
               steps {
                     sleep 60
-                    sh "bash acceptance_test.sh"
+                    sh "./gradlew acceptanceTest -Dcalculator.url=http://localhost:8765"
               }
-          }          
+          }       
      }
      post {
           always {
