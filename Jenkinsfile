@@ -26,7 +26,7 @@ pipeline {
                steps {
                     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'registry',
                     usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-                    sh "docker login --username $USERNAME --password $PASSWORD"
+                    sh "docker login testregistry.com --username $USERNAME --password $PASSWORD"
                     }
                 }
           }          
