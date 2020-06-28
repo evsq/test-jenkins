@@ -22,6 +22,14 @@ pipeline {
                     sh "docker build -t testregistry.com/calculator ."
                }
           }
+          stage("Docker login") {
+               steps {
+                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'registry',
+                    usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                    sh "docker login --username $USERNAME --password $PASSWORD"
+                    }
+                }
+          }          
           stage("Docker push") {
                steps {
                     sh "docker push testregistry.com/calculator"
